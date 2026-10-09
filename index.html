@@ -1,1 +1,329 @@
-<h1>Jarvis Home Page</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humanoid Robotics | Advanced Bipedal Intelligence</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden; /* prevent scrolling, full-screen video */
+        }
+
+        /* Video background container */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+            background-color: #0a0c0f; /* fallback while video loads */
+        }
+
+        .video-background video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(0.65) contrast(1.1);
+        }
+
+        /* Dark overlay for readability & atmosphere */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: -1;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Main content wrapper */
+        .content {
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem 4rem;
+            color: #ffffff;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Header / navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2.2rem;
+            line-height: 1;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, #ffffff, #b0d0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: color 0.2s ease, transform 0.2s ease;
+            letter-spacing: 0.01em;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            transform: translateY(-2px);
+            text-shadow: 0 0 12px rgba(100, 180, 255, 0.8);
+        }
+
+        /* Hero section */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 900px;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(to right, #ffffff, #c0e0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.4));
+        }
+
+        .hero .subhead {
+            font-size: clamp(1.1rem, 2vw, 1.6rem);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            max-width: 650px;
+            line-height: 1.5;
+            border-left: 4px solid #4a9eff;
+            padding-left: 1.5rem;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.9rem 2.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            letter-spacing: 0.02em;
+            display: inline-block;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary {
+            background: #4a9eff;
+            color: #0a0c0f;
+            border: none;
+            box-shadow: 0 12px 30px -8px #4a9eff;
+            font-weight: 700;
+        }
+
+        .btn-primary:hover {
+            background: #6bb0ff;
+            transform: scale(1.03);
+            box-shadow: 0 18px 35px -8px #4a9eff;
+        }
+
+        .btn-outline {
+            background: rgba(20, 30, 40, 0.5);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: white;
+            transform: scale(1.03);
+        }
+
+        /* Footer / stats or contact hint */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer .tagline {
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        .footer .contact {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer .contact a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer .contact a:hover {
+            color: #4a9eff;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .content {
+                padding: 1.5rem 1.8rem;
+            }
+
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+                font-size: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .hero .subhead {
+                padding-left: 1rem;
+                border-left-width: 3px;
+            }
+
+            .btn {
+                padding: 0.7rem 1.6rem;
+                font-size: 1rem;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .footer .contact {
+                gap: 1.2rem;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Video Background -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline poster="https://images.pexels.com/photos/8566520/pexels-photo-8566520.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+            <!-- Royalty-free video from Pexels: humanoid / AI robot concept -->
+            <source src="https://videos.pexels.com/video-files/3130284/3130284-uhd_3840_2160_30fps.mp4" type="video/mp4">
+            <!-- Fallback image if video doesn't load (already in poster) -->
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Main Portal Content -->
+    <div class="content">
+        <!-- Navigation -->
+        <header class="navbar">
+            <a href="#" class="logo">
+                <span class="logo-icon">🤖</span>
+                <span>HUMANOID<span style="font-weight:300;">X</span></span>
+            </a>
+            <nav class="nav-links">
+                <a href="#">Robots</a>
+                <a href="#">Technology</a>
+                <a href="#">Research</a>
+                <a href="#">Contact</a>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Intelligence,<br>Embodied.</h1>
+            <p class="subhead">
+                We build humanoid robots that walk, learn, and collaborate with humans — 
+                reshaping industries with bipedal agility and human-like dexterity.
+            </p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Meet Atlas</a>
+                <a href="#" class="btn btn-outline">Watch Demo</a>
+            </div>
+        </section>
+
+        <!-- Footer / Quick info -->
+        <footer class="footer">
+            <div class="tagline">Humanoid Robotics · Since 2020</div>
+            <div class="contact">
+                <a href="#">careers@humanoidx.ai</a>
+                <a href="#">+1 (888) 400-ROBO</a>
+                <a href="#">LinkedIn</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
